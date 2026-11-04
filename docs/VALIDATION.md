@@ -18,8 +18,17 @@ La prueba conjunta usa exclusivamente un vídeo sintético temporal; no accede a
 
 Sustituye las rutas si tus carpetas están en otro lugar. Primero instala los requisitos de ambos proyectos y compila Avatar Studio.
 
+## Prueba real de recepción de la cámara virtual
+
+Además del contrato sin cámaras, se ha realizado una prueba local acotada con los dos ejecutables descargados de la compilación limpia de GitHub:
+
+- El conector empaquetado detectó la presencia de una webcam integrada, sin abrir sus fotogramas, y arrancó la interfaz y la salida del perfil sintético seleccionado.
+- El monitor alcanzó `phase: active` y `output_ready: true`.
+- Un receptor independiente (FFmpeg/DirectShow), configurado explícitamente con `video=OBS Virtual Camera`, recibió cinco fotogramas. Se comprobaron numéricamente los colores de fondo y centro del patrón sintético, no solo la existencia de un proceso.
+- No se abrió la cámara física ni el micrófono, no se usaron archivos personales y no hubo emisión por Internet. Los procesos creados para la prueba se detuvieron al terminar.
+
 ## Límite de la validación
 
-No se ha certificado aquí la recepción de una emisión real en todas las webcams, versiones de OBS, navegadores o equipos. Cada usuario debe completar la prueba visual descrita en [CONNECT_BOTH_PROJECTS.md](CONNECT_BOTH_PROJECTS.md). Un proceso vivo o `output_ready` no demuestra por sí solo que la imagen correcta llegue a una plataforma.
+La recepción real se ha verificado en un equipo Windows, no en todas las webcams, versiones de OBS, navegadores o plataformas. Cada usuario debe completar la prueba visual descrita en [CONNECT_BOTH_PROJECTS.md](CONNECT_BOTH_PROJECTS.md). Un proceso vivo o `output_ready` no demuestra por sí solo que la imagen correcta llegue a una plataforma.
 
 Los ejecutables construidos localmente para estas pruebas no forman parte del repositorio público. Las distribuciones públicas deben proceder de una compilación limpia de GitHub Actions.
