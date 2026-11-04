@@ -4,6 +4,63 @@ Este procedimiento usa únicamente los dos proyectos públicos. Cada persona apo
 
 No se cambia silenciosamente la cámara del navegador. No uses este flujo en verificaciones de identidad, procesos bancarios o pruebas de vida.
 
+## Usar los ZIP publicados sin instalar Python
+
+Esta es la ruta recomendada para usuarios finales. Los apartados numerados siguientes explican la alternativa desde código fuente.
+
+1. Descarga `AvatarStudio-Windows.zip` y `WebcamCompanion-Windows.zip` desde **Releases** de los dos repositorios. Descomprime ambos, conservando todas sus dependencias. Instala OBS Studio con OBS Virtual Camera por separado.
+2. Abre PowerShell. Ajusta las dos primeras rutas a las carpetas extraídas que contienen los EXE:
+
+```powershell
+$StudioDir = "C:\AvatarApps\AvatarStudio"
+$CompanionDir = "C:\AvatarApps\WebcamCompanion"
+$Studio = Join-Path $StudioDir "AvatarStudio.exe"
+$StudioCLI = Join-Path $StudioDir "AvatarStudio-CLI.exe"
+$CompanionCLI = Join-Path $CompanionDir "AvatarStudioWebcamPC-CLI.exe"
+$Companion = Join-Path $CompanionDir "AvatarStudioWebcamPC.exe"
+$Workspace = Join-Path $env:LOCALAPPDATA "AvatarStudio"
+$Config = Join-Path $env:LOCALAPPDATA "AvatarStudioWebcamPC\avatar-studio-webcam-pc.local.json"
+& $CompanionCLI --self-test
+& $Studio --workspace "$Workspace"
+```
+
+3. En Avatar Studio, importa un vídeo propio, analiza y revisa los trece segmentos y pulsa **Confirmar revisión**. Debe quedar **Listo para usar**. No actives todavía otra salida de cámara virtual. Conserva esta ventana de PowerShell para los pasos siguientes.
+4. Lista los perfiles y copia el campo `id` del perfil listo. Sustituye el ejemplo:
+
+```powershell
+& $StudioCLI --workspace "$Workspace" --list-profiles
+$ProfileId = "SUSTITUYE_POR_EL_ID_REAL"
+& $StudioCLI --workspace "$Workspace" --play-profile "$ProfileId" --check-profile
+```
+
+Si la comprobación no termina correctamente, corrige el perfil antes de continuar.
+
+5. Configura la conexión local:
+
+```powershell
+& $CompanionCLI --config "$Config" --setup --runtime-executable "$Studio" --project-root "$Workspace" --profile-id "$ProfileId"
+```
+
+Debe indicar que la configuración se ha creado. No publiques ese archivo ni el manifiesto de integridad. Si cambias el perfil, su catálogo, el vídeo o la distribución, detén el monitor, revisa el cambio y repite la configuración.
+
+6. Detén cualquier otro productor de OBS Virtual Camera. Cierra cualquier monitor anterior desde su bandeja e inicia el nuevo:
+
+```powershell
+& $Companion --config "$Config"
+```
+
+Con una webcam integrada ya presente no necesitas desconectar nada. Espera unos segundos; el conector debe abrir el estudio y el controlador del perfil.
+
+7. Consulta el estado desde la misma consola:
+
+```powershell
+& $CompanionCLI --config "$Config" --status
+```
+
+El resultado normal es `phase: "active"` y `output_ready: true`. En la web o aplicación receptora selecciona **OBS Virtual Camera** y comprueba visualmente la imagen y los movimientos. El micrófono se elige aparte; no se sustituye automáticamente la cámara que una web haya seleccionado.
+
+8. Para detenerlo, cierra el receptor y sal del monitor desde su icono junto al reloj. Para usarlo otro día, repite el comando del paso 6: no necesitas Python ni este chat. La guía no instala el arranque con Windows automáticamente.
+
 ## 1. Instalar y compilar Avatar Studio
 
 Descarga los dos repositorios y descomprímelos por separado. Sigue primero [INSTALL_AND_TEST.md](INSTALL_AND_TEST.md) para los requisitos del proyecto que estés leyendo. En la carpeta del repositorio **Avatar Studio**, instala y compila:
