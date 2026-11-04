@@ -4,6 +4,12 @@ Avatar Studio es una aplicación local para preparar un avatar de vídeo propio 
 
 La aplicación empieza con una biblioteca vacía. Cada usuario importa un vídeo propio y sus perfiles, informes y rutas se guardan únicamente en su carpeta local `data/studio/`, que Git ignora.
 
+## Descargar para Windows
+
+En [Releases](https://github.com/mguantalamera-cpu/avatar-studio/releases/latest) encontrarás el ZIP compilado en una máquina limpia de GitHub. Descomprímelo y conserva toda la carpeta: `AvatarStudio.exe` abre la interfaz y `AvatarStudio-CLI.exe` permite comprobar perfiles. No necesitas Python para esa distribución. OBS y tu vídeo se preparan por separado.
+
+El conector está en [Avatar Studio Webcam Companion](https://github.com/mguantalamera-cpu/avatar-studio-webcam-pc).
+
 **Empieza por [la guía completa de instalación y pruebas](docs/INSTALL_AND_TEST.md)**: explica cómo instalar, importar un vídeo, revisar movimientos, probar la cámara virtual, detener la emisión y resolver errores.
 
 **Conectar ambos proyectos:** esta versión incluye el contrato público de Webcam Companion. Compila la distribución, prepara un perfil revisado y sigue [la guía de conexión paso a paso](docs/CONNECT_BOTH_PROJECTS.md). El conector abre este estudio y reproduce el perfil elegido; no necesita el runtime privado anterior.

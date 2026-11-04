@@ -17,6 +17,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--companion-source", required=True, type=Path)
     parser.add_argument("--studio-release", required=True, type=Path)
+    parser.add_argument("--companion-cli", type=Path, help="Optional packaged companion CLI")
     args = parser.parse_args()
     source = args.companion_source.resolve() / "src"
     if not (source / "avatar_studio_webcam_pc" / "__init__.py").is_file():
@@ -63,10 +64,19 @@ def main() -> int:
         profile.segments_path.write_text(yaml.safe_dump(segments.to_yaml_data()), encoding="utf-8")
         profile = store.update_status(profile.profile_id, ProfileStatus.READY)
         local_config = root / "local" / "avatar-studio-webcam-pc.local.json"
-        create_local_configuration(
-            config_path=local_config, executable_path=executable,
-            project_root=workspace, profile_id=profile.profile_id,
-        )
+        if args.companion_cli is None:
+            create_local_configuration(
+                config_path=local_config, executable_path=executable,
+                project_root=workspace, profile_id=profile.profile_id,
+            )
+        else:
+            completed = subprocess.run([
+                str(args.companion_cli.resolve()), "--config", str(local_config), "--setup",
+                "--runtime-executable", str(executable), "--project-root", str(workspace),
+                "--profile-id", profile.profile_id,
+            ], capture_output=True, text=True, timeout=90)
+            if completed.returncode:
+                raise RuntimeError(f"Packaged companion setup failed: {completed.stderr}")
         config = load_config(local_config, environ={"LOCALAPPDATA": str(root / "Local")})
         WindowsProcessRunner._verify(config.executable)
         commands = [
