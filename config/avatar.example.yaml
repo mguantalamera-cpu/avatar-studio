@@ -1,0 +1,21 @@
+# Example only. Do not put a personal video inside this repository.
+# Avatar Studio creates a private profile configuration after you import a local video.
+video:
+  path: assets/your-avatar-video.mp4
+  preserve_resolution: true
+  preserve_fps: true
+  preload_segments: true
+
+playback:
+  start_state: CENTER
+  command_queue: true
+  max_queue_size: 2
+  idle_loop_crossfade_frames: 6
+  transition_crossfade_frames: 4
+  allow_experimental_optical_flow: false
+
+output:
+  mode: window
+  fullscreen: false
+  virtual_camera_enabled: false
+  virtual_camera_backend: obs

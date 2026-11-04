@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools==80.10.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "avatar-studio"
+version = "0.1.0"
+description = "Local desktop studio for preparing and streaming user-owned video avatars."
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "av==17.0.1",
+    "numpy==2.4.4",
+    "opencv-python==4.13.0.92",
+    "PySide6==6.11.1",
+    "pyvirtualcam==0.15.0",
+    "PyYAML==6.0.3",
+]
+
+[project.optional-dependencies]
+enhanced-analysis = ["mediapipe>=0.10,<0.11"]
+
+[project.scripts]
+avatar-studio = "avatar_controller.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
